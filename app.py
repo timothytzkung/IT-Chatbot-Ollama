@@ -52,9 +52,9 @@ def generate_with_rag(query, history):
     # We send this to Ollama, which is running efficiently in the background
       # Build a clean prompt
     prompt_content = f"""You are an IT helpdesk assistant.
-If the user did not ask a question, be friendly and ask how you can help them.
 If the user asked a question, answer the user's question with detailed step by step instructions: consider all the articles below.
 If the user asked a question and the answer is not in the contexts, say you don't know and suggest contacting SFU IT.
+If the user DID NOT ask a question, be friendly and ask how you can help them.
 
 
 Question:
