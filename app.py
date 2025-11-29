@@ -10,16 +10,31 @@ import os
 print("Loading RAG system on your device...")
 
 # Load Knowledge base
-FILE_PATH = "data.json"
+FILE_PATH = "data.jsonl"
+PRELOAD_FILE_PATH = "preload-data"
+
+# File path readings
 if not os.path.exists(FILE_PATH):
     # Dummy data for testing if you don't have the file yet
     print(f"Warning: {FILE_PATH} not found. Creating dummy data.")
-    data = [{"clean_body_text": "To reset your password, visit password.sfu.ca and click 'Forgot Password'."}]
+    data = [{"text": "To reset your password, visit password.sfu.ca and click 'Forgot Password'."}]
+elif os.path.exists(PRELOAD_FILE_PATH):
+    print(f"Found Preloaded Data! Using {PRELOAD_FILE_PATH}...")
+    with open(PRELOAD_FILE_PATH, "r", encoding="utf-8") as f:
+        data = json.load(f)
 else:
     with open(FILE_PATH, "r", encoding="utf-8") as f:
-        data = json.load(f)
+        print(f"No Preloaded Data Found. Using {FILE_PATH}...")
+        data = pd.read_json(path_or_buf=f, lines=True)
 
-documents = [item["clean_body_text"] for item in data]
+# Writes in data embedding
+if not os.path.exists(PRELOAD_FILE_PATH):
+    documents = list(data["text"])
+    print(f"Creating {PRELOAD_FILE_PATH}...")
+    with open("preload-data", "w") as fp:
+        json.dump(documents, fp)
+else:
+    documents = data
 
 # Embeddings
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -31,7 +46,7 @@ df = pd.DataFrame({
 })
 
 # --- RAG Logic ---
-def retrieve_with_pandas(query: str, top_k: int = 2):
+def retrieve_with_pandas(query: str, top_k: int = 10):
     query_embedding = embedding_model.encode([query])[0]
 
     def cosine_sim(x):
