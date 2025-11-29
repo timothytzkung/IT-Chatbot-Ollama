@@ -7,7 +7,7 @@ https://ollama.com/download
 Then, you need to download Gemma3-4b from your terminal:<br>
 `ollama pull gemma3:4b`
 
-Now, first set up virtual environment:<br>
+Now, inside the app project folder, first set up virtual environment:<br>
 `python3 -m venv venv`<br>
 `source venv/bin/activate`
 
