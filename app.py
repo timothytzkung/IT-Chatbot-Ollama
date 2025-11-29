@@ -7,7 +7,7 @@ from sentence_transformers import SentenceTransformer
 import os
 
 # --- Configuration ---
-print("Loading RAG system on Mac M1...")
+print("Loading RAG system on your device...")
 
 # Load Knowledge base
 FILE_PATH = "data.json"
@@ -83,8 +83,8 @@ Answer:"""
 # --- Interface ---
 demo = gr.ChatInterface(
     fn=generate_with_rag,
-    title="SFU IT Chatbot (Tim's Mac M1 Hosted)",
-    description="Running locally on Tim's poor Apple Silicon.",
+    title="SFU IT Chatbot (Locally Hosted)",
+    description="Running locally on your device~!",
 )
 
 if __name__ == "__main__":
