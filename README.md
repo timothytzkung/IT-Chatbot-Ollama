@@ -7,15 +7,16 @@ https://ollama.com/download
 Then, you need to download Gemma3-4b from your terminal:<br>
 `ollama pull gemma3:4b`
 
-Now, first set up virtual environment:<br> 
-[Mac/Linux]:<br>
+Now, first set up virtual environment. Below are listed instructions depending on your OS.
+For Mac/Linux:<br>
 `python3 -m venv venv`<br>
-`source venv/bin/activate`<br>
+`source venv/bin/activate`
 
-[Windows]:<br>
+For Windows:<br>
 `python3 -m venv venv`<br>
 `C:\Users\Your Name> venv\Scripts\activate`<br>
 
+For Mac/Linux/Windows:
 Then install requirements:<br>
 `pip install -r requirements.txt`
 
