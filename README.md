@@ -8,11 +8,11 @@ https://ollama.com/download
 `ollama pull gemma3:4b`
 
 ### Now, first set up virtual environment. Below are listed instructions depending on your OS.<br>
-For Mac/Linux:<br>
+#### For Mac/Linux:<br>
 `python3 -m venv venv`<br>
 `source venv/bin/activate`
 
-### For Windows:<br>
+#### For Windows:<br>
 `python3 -m venv venv`<br>
 `C:\Users\Your Name> venv\Scripts\activate`<br>
 
