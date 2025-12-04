@@ -45,9 +45,6 @@ df = pd.DataFrame({
     "Embedding": list(embeddings),
 })
 
-# Chat history
-total_history = []
-
 # --- RAG Logic ---
 def retrieve_with_pandas(query: str, top_k: int = 10):
     query_embedding = embedding_model.encode([query])[0]
