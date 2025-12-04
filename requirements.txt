@@ -1,14 +1,16 @@
 torch>=2.4.0
 transformers>=4.50.0
 accelerate>=0.26.0
-sentence-transformers>=2.2.2
+sentence-transformers
 gradio>=4.0.0
 pandas
 numpy
 scipy
 ollama
+fastparquet
+pyarrow
 
-gradio_client==1.4.3
+gradio_client
 huggingface-hub
 keras
 libclang
