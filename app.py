@@ -6,12 +6,14 @@ import ollama  # pip install ollama
 from sentence_transformers import SentenceTransformer
 import os
 
+
 # --- Configuration ---
 print("Loading RAG system on your device...")
 
 # Load Knowledge base
 FILE_PATH = "data.jsonl"
 PRELOAD_FILE_PATH = "preload-data"
+PRELOAD_PARQUET = "preload.parquet"
 
 # File path readings
 if not os.path.exists(FILE_PATH):
@@ -38,12 +40,21 @@ else:
 
 # Embeddings
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-embeddings = embedding_model.encode(documents, convert_to_numpy=True)
 
-df = pd.DataFrame({
-    "Document": documents,
-    "Embedding": list(embeddings),
-})
+if not os.path.exists(PRELOAD_PARQUET):
+    print("Preload parquet not found. Creating parquet...")
+    embeddings = embedding_model.encode(documents, convert_to_numpy=True)
+
+    df = pd.DataFrame({
+        "Document": documents,
+        "Embedding": list(embeddings),
+    })
+    tmp = df.to_parquet(PRELOAD_PARQUET)
+else:
+    print("Parquet found!")
+    df = pd.read_parquet(PRELOAD_PARQUET, engine='fastparquet')
+print("Parquet established.")
+
 
 # --- RAG Logic ---
 def retrieve_with_pandas(query: str, top_k: int = 10):
@@ -63,7 +74,8 @@ def clean_query_with_llm(query, history):
     prompt_content = f"""    
     Below is a new question asked by the user that needs to be answered by searching in a knowledge base.
     You have access to SFU IT Knowledge Base index with 100's of chunked documents.
-    Generate a search question based the user's question.
+    Generate a search query based the user's question.
+    Add goSFU to the search querty if the user's question mentions course registration, viewing grades, tracking degree progress, ordering transcripts, and applying for graduation.
     If you cannot generate a search query, return just the number 0.
 
     User's Question:
@@ -100,8 +112,7 @@ def generate_with_rag(query, history):
     You are a SFU IT helpdesk chatbot.
     Your task is to answer SFU IT related questions such as accessing various technology services or general troubleshooting. 
     Below is new question asked by the user, and related article chunks to the user question.
-    If the user asked a question, answer the user's question with detailed step by step instructions: consider all the articles below.
-    If there are links in the articles, provide those links in your answer.
+    If the user asked a question, answer the user's question with detailed step by step instructions: consider any relevant articles below.
     If the user asked a question and the answer is not in the contexts, say that you're sorry that you can't help them and suggest contacting SFU IT at 778-782-8888 or by submitting an inquiry ticket at https://www.sfu.ca/information-systems/get-help.html
     If the user DID NOT ask a question, be friendly and ask how you can help them.
     Do not recommend, suggest, or provide any advice on anything that is not related to SFU or SFU IT.

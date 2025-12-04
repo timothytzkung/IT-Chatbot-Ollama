@@ -7,6 +7,8 @@ pandas
 numpy
 scipy
 ollama
+fastparquet
+pyarrow
 
 gradio_client
 huggingface-hub
